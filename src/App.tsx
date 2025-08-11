@@ -18,7 +18,7 @@ const queryClient = new QueryClient();
 
 const AudioPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState(true); // Default to true
+  const [isPlaying, setIsPlaying] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showMusicPrompt, setShowMusicPrompt] = useState(false);
 
@@ -28,53 +28,72 @@ const AudioPlayer = () => {
 
     // Set audio properties
     audio.loop = true;
-    audio.volume = 0.4; // Set volume to 40%
+    audio.volume = 0.5; // Set volume to 50%
     
-    // Try to autoplay immediately
+    // Try multiple autoplay strategies
     const tryAutoPlay = async () => {
       try {
+        // Strategy 1: Direct play
         await audio.play();
         setIsPlaying(true);
         setHasInteracted(true);
         setShowMusicPrompt(false);
+        console.log("Music started successfully!");
       } catch (error) {
-        // Autoplay blocked, wait for user interaction
-        setIsPlaying(false);
-        setShowMusicPrompt(true);
-        console.log("Autoplay blocked, waiting for user interaction");
+        console.log("Direct autoplay blocked, trying alternative methods");
         
-        // Hide prompt after 5 seconds
-        setTimeout(() => setShowMusicPrompt(false), 5000);
+        // Strategy 2: Try with muted first, then unmute
+        try {
+          audio.muted = true;
+          await audio.play();
+          audio.muted = false;
+          setIsPlaying(true);
+          setHasInteracted(true);
+          setShowMusicPrompt(false);
+        } catch (muteError) {
+          // Strategy 3: Wait for user interaction
+          setIsPlaying(false);
+          setShowMusicPrompt(true);
+          console.log("Autoplay blocked, waiting for user interaction");
+          
+          // Hide prompt after 8 seconds
+          setTimeout(() => setShowMusicPrompt(false), 8000);
+        }
       }
     };
 
-    // Attempt autoplay on load
-    tryAutoPlay();
+    // Attempt autoplay with slight delay
+    const timer = setTimeout(tryAutoPlay, 100);
 
-    // Auto play after first user interaction if not already playing
-    const handleFirstInteraction = () => {
-      if (!hasInteracted && !isPlaying) {
+    // Auto play on ANY user interaction
+    const handleUserInteraction = async () => {
+      if (!hasInteracted || !isPlaying) {
         setHasInteracted(true);
         setShowMusicPrompt(false);
-        audio.play().then(() => {
+        try {
+          audio.muted = false;
+          await audio.play();
           setIsPlaying(true);
-        }).catch(console.error);
+          console.log("Music started after user interaction!");
+        } catch (error) {
+          console.error("Failed to start music:", error);
+        }
       }
     };
 
-    // Listen for any user interaction
-    document.addEventListener('click', handleFirstInteraction);
-    document.addEventListener('keydown', handleFirstInteraction);
-    document.addEventListener('scroll', handleFirstInteraction);
-    document.addEventListener('touchstart', handleFirstInteraction);
+    // Listen for various user interactions
+    const events = ['click', 'keydown', 'scroll', 'touchstart', 'mousemove', 'mousedown'];
+    events.forEach(event => {
+      document.addEventListener(event, handleUserInteraction, { once: true });
+    });
 
     return () => {
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('keydown', handleFirstInteraction);
-      document.removeEventListener('scroll', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
+      clearTimeout(timer);
+      events.forEach(event => {
+        document.removeEventListener(event, handleUserInteraction);
+      });
     };
-  }, [hasInteracted, isPlaying]);
+  }, []);
 
   const toggleMusic = () => {
     const audio = audioRef.current;
@@ -98,32 +117,41 @@ const AudioPlayer = () => {
         src={sanggarBaktiMusic}
         preload="auto"
         autoPlay
-        muted={false}
+        playsInline
+        loop
       />
       
       {/* Music Prompt */}
       {showMusicPrompt && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-          <div className="bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg animate-pulse">
-            <p className="text-sm">🎵 Klik di mana saja untuk memutar musik latar</p>
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-top">
+          <div className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg shadow-lg">
+            <p className="text-sm font-medium flex items-center gap-2">
+              🎵 <span>Klik di mana saja untuk menikmati musik latar belakang</span>
+            </p>
           </div>
         </div>
       )}
       
       {/* Music Control Button */}
       <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          onClick={toggleMusic}
-          size="sm"
-          className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg rounded-full p-3"
-          title={isPlaying ? "Matikan Musik" : "Putar Musik"}
-        >
-          {isPlaying ? (
-            <Volume2 className="w-5 h-5" />
-          ) : (
-            <VolumeX className="w-5 h-5" />
+        <div className="relative">
+          {/* Pulsing indicator when music is playing */}
+          {isPlaying && (
+            <div className="absolute -inset-2 bg-primary/30 rounded-full animate-ping"></div>
           )}
-        </Button>
+          <Button
+            onClick={toggleMusic}
+            size="sm"
+            className="relative bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg rounded-full p-3 transition-all duration-300 hover:scale-110"
+            title={isPlaying ? "Matikan Musik" : "Putar Musik"}
+          >
+            {isPlaying ? (
+              <Volume2 className="w-5 h-5" />
+            ) : (
+              <VolumeX className="w-5 h-5" />
+            )}
+          </Button>
+        </div>
       </div>
     </>
   );
