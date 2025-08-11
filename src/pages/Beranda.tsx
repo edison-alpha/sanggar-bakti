@@ -419,18 +419,11 @@ const Beranda = () => {
       <section className="py-12 sm:py-16 lg:py-20 bg-gradient-primary text-primary-foreground">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">
-            Bergabunglah Bersama Kami
+            Ikuti Terus Keseruan Kami
           </h2>
           <p className="text-lg sm:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto opacity-90 px-4">
             Mari bersatu dalam semangat kemerdekaan dan membangun Indonesia yang lebih baik
           </p>
-          <Button 
-            size="lg" 
-            variant="secondary"
-            className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 shadow-elegant text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 h-auto min-h-[48px] w-full sm:w-auto max-w-xs sm:max-w-none"
-          >
-            Hubungi Kami
-          </Button>
         </div>
       </section>
 
