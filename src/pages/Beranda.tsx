@@ -6,6 +6,7 @@ import bg from "@/assets/bg.png";
 import bg2 from "@/assets/bg2.png";
 import ornamen from "@/assets/ornamen.png";
 import { motion } from "framer-motion";
+import LiveScoreWidget from "@/components/LiveScoreWidget";
 
 const Beranda = () => {
   // Sample gallery photos (you can replace with actual photos)
@@ -411,6 +412,40 @@ const Beranda = () => {
                 Lihat Semua Foto
               </Button>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Live Score Section */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="text-center mb-8"
+              >
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 text-foreground">
+                  Turnamen Voli HUT RI ke-80
+                </h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Saksikan pertandingan seru antar tim dan lihat perkembangan klasemen terkini
+                </p>
+              </motion.div>
+            </div>
+            <div className="lg:col-span-1">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
+                <LiveScoreWidget />
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>

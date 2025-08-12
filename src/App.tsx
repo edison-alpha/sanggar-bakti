@@ -10,6 +10,7 @@ import Layout from "./components/Layout/Layout";
 import Beranda from "./pages/Beranda";
 import Kegiatan from "./pages/Kegiatan";
 import Jadwal from "./pages/Jadwal";
+import Klasemen from "./pages/Klasemen";
 import TentangKami from "./pages/TentangKami";
 import NotFound from "./pages/NotFound";
 import sanggarBaktiMusic from "./sounds/sanggar-bakti.mp3";
@@ -169,6 +170,7 @@ const App = () => (
             <Route path="/" element={<Beranda />} />
             <Route path="/kegiatan" element={<Kegiatan />} />
             <Route path="/jadwal" element={<Jadwal />} />
+            <Route path="/klasemen" element={<Klasemen />} />
             <Route path="/tentang-kami" element={<TentangKami />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

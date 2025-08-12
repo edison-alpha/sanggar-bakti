@@ -24,6 +24,7 @@ const Navbar = () => {
     { name: "Beranda", path: "/" },
     { name: "Kegiatan", path: "/kegiatan" },
     { name: "Jadwal", path: "/jadwal" },
+    { name: "Klasemen Voli", path: "/klasemen" },
     { name: "Tentang Kami", path: "/tentang-kami" },
   ];
 
