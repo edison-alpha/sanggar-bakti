@@ -7,6 +7,7 @@ import bg2 from "@/assets/bg2.png";
 import ornamen from "@/assets/ornamen.png";
 import { motion } from "framer-motion";
 import LiveScoreWidget from "@/components/LiveScoreWidget";
+import garudaLogo from "@/assets/garuda-logo.png";
 
 const Beranda = () => {
   // Sample gallery photos (you can replace with actual photos)
@@ -469,7 +470,7 @@ const Beranda = () => {
             {/* Logo and Description */}
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <img src="/src/assets/garuda-logo.png" alt="Logo" className="h-10 w-10" />
+                                <img src={garudaLogo} alt="Logo" className="h-10 w-10" />
                 <div>
                   <h3 className="text-xl font-bold text-white">Karang Taruna</h3>
                   <p className="text-lg" style={{ color: '#c7282a' }}>Sanggar Bakti</p>
@@ -564,5 +565,6 @@ const Beranda = () => {
     </div>
   );
 };
+
 
 export default Beranda;
