@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX } from "lucide-react";
 import Layout from "./components/Layout/Layout";
+import LyricsWidget from "./components/LyricsWidget";
 import Beranda from "./pages/Beranda";
 import Kegiatan from "./pages/Kegiatan";
 import Jadwal from "./pages/Jadwal";
@@ -164,6 +165,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AudioPlayer />
+      <LyricsWidget />
       <BrowserRouter>
         <Layout>
           <Routes>
